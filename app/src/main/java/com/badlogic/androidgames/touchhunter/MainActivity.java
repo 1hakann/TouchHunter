@@ -1,5 +1,6 @@
 package com.badlogic.androidgames.touchhunter;
 
+import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -149,5 +150,57 @@ public class MainActivity extends Activity {
     }
 
     // 10- Let's Boom method coding now. This code says "BOOM!"
+    void Boom()
+    {
+        // Let's create an image and call
+        imageView.setImageBitmap(bitmap);
+        canvas.drawColor(Color.argb(255, 145, 21,85));
+        paint.setColor(Color.argb(255,255,255,255));
+        paint.setTextSize(block*10);
+        canvas.drawText("BOOOM",block*4, block*10, paint);
 
+        // Draw some text to prompt restarting
+        paint.setTextSize(block * 2);
+        canvas.drawText("Tekrar Başlamak İçin Dokunun", block*8, block*18, paint);
+
+        NewGame();
+    }
+    
+    void DebuggingPrintText()
+    {
+        paint.setTextSize(block);
+        canvas.drawText("horPixels = "
+                        + horPixels,
+                50, block * 3, paint);
+        canvas.drawText("verPixels = "
+                        + verPixels,
+                50, block * 4, paint);
+        canvas.drawText("block = " + block,
+                50, block * 5, paint);
+        canvas.drawText("gridW = " + gridW,
+                50, block * 6, paint);
+        canvas.drawText("gridH = " + gridH,
+                50, block * 7, paint);
+        canvas.drawText("touchH = " +
+                        touchH, 50,
+                block * 8, paint);
+        canvas.drawText("touchV = " +
+                        touchV, 50,
+                block * 9, paint);
+        canvas.drawText("monsterHorPos = " +
+                        monsterHorPos, 50,
+                block * 10, paint);
+        canvas.drawText("subVerticalPosition = " +
+                        monsterVerPos, 50,
+                block * 11, paint);
+        canvas.drawText("hit = " + isHit,
+                50, block * 12, paint);
+        canvas.drawText("shotsTaken = " +
+                        shotsTaken,
+                50, block * 13, paint);
+        canvas.drawText("debugging = " + isDebug,
+                50, block * 14, paint);
+    }
+
+    
 }
