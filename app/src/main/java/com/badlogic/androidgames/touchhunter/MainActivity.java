@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
     int horPixels;
     int verPixels;
     int block;
-    int gridW;
+    int gridW = 30;
     int gridH;
     float touchV = -100;
     float touchH = -100;
@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 
     // 4- We will now override onCreate. and we will link our classes and objects that allow us to display images on the screen.
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -53,8 +53,8 @@ public class MainActivity extends Activity {
         // 5- Let's initialize our variables. we will use one class. That's why I didn't need to create a constructor.
         horPixels = size.x;
         verPixels = size.y;
-        gridW = horPixels / block;
-        block = verPixels / gridH;
+        block = horPixels / gridW;
+        gridH = verPixels / block;
 
         bitmap = Bitmap.createBitmap(horPixels,verPixels,Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
@@ -72,8 +72,8 @@ public class MainActivity extends Activity {
     void NewGame()
     {
         Random random = new Random();
-        monsterHorPos = random.nextInt(gridH);
-        monsterVerPos = random.nextInt(gridW);
+        monsterHorPos = random.nextInt(gridW);
+        monsterVerPos = random.nextInt(gridH);
         shotsTaken = 0;
 
         Log.d("Debugging","In NewGame");
@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
     void Draw()
     {
         imageView.setImageBitmap(bitmap);
-        canvas.drawColor(Color.argb(232,167,184,65));
+        canvas.drawColor(Color.argb(255,167,184,65));
         paint.setColor(Color.argb(255,0,0,0));
 
         // 7.1- Draw the vertical lines of the grid
@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
         canvas.drawRect(touchH*block, touchV*block,(touchH*block)+block, (touchV*block)+block, paint);
 
         // 7.4- Re-size the text appropriate for the score and distance text
-        paint.setTextSize(block*3);
+        paint.setTextSize(block*2);
         paint.setColor(Color.argb(255,0,0,255));
         canvas.drawText("Vuruş Sayısı: "+shotsTaken + " Mesafe: "+farFromMonster, block, block * 2f, paint);
 
@@ -131,14 +131,14 @@ public class MainActivity extends Activity {
         Log.d("Debugging", "In Shoot");
 
         shotsTaken++;
-        touchH = (int)block/touchX;
-        touchV = (int)block/touchY;
+        touchH = (int)touchX/block;
+        touchV = (int)touchY/block;
 
         isHit = touchH == monsterHorPos && touchV == monsterVerPos;
 
         // Let's calculate the stroke, we will apply Pythagoras
-        int horGap = (int)(touchH - touchX);
-        int verGap = (int)(touchV - touchY);
+        int horGap = (int)(touchH - monsterHorPos);
+        int verGap = (int)(touchV - monsterVerPos);
 
         farFromMonster = (int) Math.sqrt((horGap * horGap) + (verGap * verGap));
 
@@ -156,12 +156,12 @@ public class MainActivity extends Activity {
         imageView.setImageBitmap(bitmap);
         canvas.drawColor(Color.argb(255, 145, 21,85));
         paint.setColor(Color.argb(255,255,255,255));
-        paint.setTextSize(block*10);
-        canvas.drawText("BOOOM",block*4, block*10, paint);
+        paint.setTextSize(block*8);
+        canvas.drawText("BOOOM",block, block*10, paint);
 
         // Draw some text to prompt restarting
         paint.setTextSize(block * 2);
-        canvas.drawText("Tekrar Başlamak İçin Dokunun", block*8, block*18, paint);
+        canvas.drawText("Tekrar Başlamak İçin Dokunun", block*2, block*16, paint);
 
         NewGame();
     }
@@ -201,6 +201,4 @@ public class MainActivity extends Activity {
         canvas.drawText("debugging = " + isDebug,
                 50, block * 14, paint);
     }
-
-    
 }
